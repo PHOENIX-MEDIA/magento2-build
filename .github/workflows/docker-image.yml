@@ -2,6 +2,9 @@ name: CI
 
 on: [push]
 
+env:
+  MAGENTO_VERSION: "2.4.4"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,11 +32,6 @@ jobs:
       
     - name: Remove auth.json file
       run: rm -f $GITHUB_WORKSPACE/.composer/auth.json
-
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
       
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -49,7 +47,8 @@ jobs:
         
     - name: Build and push
       uses: docker/build-push-action@v3
+      if: github.ref == 'refs/heads/main'
       with:
         context: .
         push: true
-        tags: phoenixmedia/magento2:${{ steps.extract_branch.outputs.branch }}
+        tags: phoenixmedia/magento2:${{ env.MAGENTO_VERSION }}
