@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 env:
-  MAGENTO_VERSION: "2.4.4"
+  MAGENTO_VERSION: "2.4.5"
 
 jobs:
   build:
